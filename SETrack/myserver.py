@@ -8,10 +8,18 @@ from argon2 import PasswordHasher
 from argon2.exceptions import InvalidHashError, VerifyMismatchError
 
 #region Socket
-#TODO: Creati conexiunea socket
 
-#TODO: dati bind pe 0.0.0.0 si portul 3000, apoi listen
-clients = {}  # dictionar pentru clientii conectati {username: {"conn": conn, "lock": Lock, "user_id": id}}
+#TODO: Creati conexiunea socket
+def run_server():
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+HOST="0.0.0.0"
+PORT=3000
+def main() -> None:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+        server_socket.bind((HOST, PORT))
+        server_socket.listen(1)
+#TODO: dati bind.pe 0.0.0.0 si portul 3000, apoi listen
+ # dictionar pentru clientii conectati {username: {"conn": conn, "lock": Lock, "user_id": id}}
 clients_lock = threading.Lock()
 #endregion
 
@@ -27,7 +35,7 @@ CREATE TABLE IF NOT EXISTS users(
 ''')
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS friendship(
-               id INTEGER PRIMARY KEY AUTOINCREMENT,
+               id INTEGER PRIMARY KEY AUTOINCREMENT, 
                user1 INTEGER NOT NULL,
                user2 INTEGER NOT NULL,
                sender_id INTEGER NOT NULL,
@@ -106,7 +114,7 @@ def recv_packet(conn, buffer):
 
 def user_pair(id1, id2):
     """TODO: Aranjeaza cele doua id-uri in ordine stabila (user1 < user2), la fel
-    ca in baza de date, si returneaza-le ca tuple (user1, user2)"""
+    cum facea codul vechi cu min/max pentru tabelul friendship."""
     pass
 
 
@@ -344,6 +352,5 @@ def get_msg(conn):
 
 
 while True:
-    pass
     #TODO: accepta o conexiune si saleaza conexiunea si adresa. Creaza un print unde vei scrie cu ce adresa s a efectuat conexiunea
     #TODO: Creaza un thread care are target functia get_msg, args conn si este un daemon. Porneste thread ul
